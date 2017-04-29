@@ -16,9 +16,81 @@ class App(tk.Tk):
 
   def pythagoras(self):
     calc_win = PythagorasCalc()
+    calc_win.mainloop()
 
   def quadratic(self):
-    pass
+    calc_win = QuadraticCalc()
+    calc_win.mainloop()
+
+class QuadraticCalc(tk.Tk):
+  def __init__(self):
+    tk.Tk.__init__(self)
+    self.title('Quadratic Calculator')
+
+    self.form_tag = tk.Label(self,text='ax^2 + bx + c = 0')
+
+    self.tags = [
+    tk.Label(self,text='Value A'),
+    tk.Label(self,text='Value B'),
+    tk.Label(self,text='Value C')
+    ]
+
+    self.complete_sqr = tk.Label(self,text='Complete square will show here')
+    self.ans = tk.Label(self,text='x=')
+    self.ans2=tk.Label(self,text='x=')
+
+    self.entries = [
+    tk.Entry(self),
+    tk.Entry(self),
+    tk.Entry(self)
+    ]
+
+    self.button = tk.Button(self,text='Calculate!',command=self.calculate)
+
+    j = 1
+    for k in self.entries:
+      k.grid(row=j,column=1)
+      j+=1
+
+    j = 1
+    for k in self.tags:
+      k.grid(row=j,column=0)
+      j+=1
+
+    self.button.grid(row=4,columnspan=2)
+    self.form_tag.grid(row=0,columnspan=2)
+
+    self.complete_sqr.grid(row=5,columnspan=2)
+    self.ans.grid(row=6,column=0)
+    self.ans2.grid(row=6,column=1)
+
+  def calculate(self):
+    a = ''
+    b = ''
+    c = ''
+
+    a = int(self.entries[0].get())
+    b = int(self.entries[1].get())
+    c = int(self.entries[2].get())
+
+    b = b/a
+    c = c/a
+
+    b2 = -1*(b/2)
+    c2 = abs(c - (b2**2))
+
+    complete_sqr = str(b2) + '± √' + str(c2) + ' = x'
+
+    ans1 = b2 + sqrt(c2)
+    ans2 = b2 - sqrt(c2)
+
+    ans1 = round(ans1,4)
+    ans2 = round(ans2,4)
+
+    self.complete_sqr['text'] = complete_sqr
+    self.ans['text'] = 'x=' + str(ans1)
+    self.ans2['text'] = 'x=' + str(ans2)
+
 
 class PythagorasCalc(tk.Tk):
   def __init__(self):
@@ -29,16 +101,16 @@ class PythagorasCalc(tk.Tk):
     self.b_tag = tk.Label(self,text='Width')
     self.h_tag = tk.Label(self,text='Hyp')
 
-    self.entries = {
-    'height' : tk.Entry(self),
-    'width' : tk.Entry(self),
-    'hyp' : tk.Entry(self)
-    }
+    self.entries = [
+    tk.Entry(self),
+    tk.Entry(self),
+    tk.Entry(self)
+    ]
 
     self.button = tk.Button(self,text='Calculate!',command=self.calculate)
 
     j = 0
-    for _,k in self.entries.items():
+    for k in self.entries:
       k.grid(row=j,column=1)
       j+=1
     self.a_tag.grid(row=0)
@@ -49,7 +121,7 @@ class PythagorasCalc(tk.Tk):
 
   def calculate(self):
     values_available = 0
-    for _,k in self.entries.items():
+    for k in self.entries:
       if k.get() != '':
         try:
           x = float(k.get())
@@ -60,21 +132,21 @@ class PythagorasCalc(tk.Tk):
       b = ''
       h = ''
 
-      a = self.entries['height'].get()
-      b = self.entries['width'].get()
-      h = self.entries['hyp'].get()
+      a = self.entries[0].get()
+      b = self.entries[1].get()
+      h = self.entries[2].get()
 
       print('h' + h)
       print('b' + b)
       print('a' + a)
 
       if h == '':
-        self.entries['hyp'].insert(0,str(sqrt(float(a)**2 + float(b)**2)))
+        self.entries[2].insert(0,str(sqrt(float(a)**2 + float(b)**2)))
       else:
         if a == '':
-          self.entries['height'].insert(0,str(sqrt(float(h)**2 - float(b)**2)))
+          self.entries[0].insert(0,str(sqrt(float(h)**2 - float(b)**2)))
         if b == '':
-          self.entries['width'].insert(0,str(sqrt(float(h)**2 - float(a)**2)))
+          self.entries[1].insert(0,str(sqrt(float(h)**2 - float(a)**2)))
 
 
 app = App()
