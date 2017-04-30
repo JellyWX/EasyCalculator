@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import messagebox
 
+from PIL import Image, ImageTk
+
 from math import sqrt
 
 class App(tk.Tk):
@@ -22,10 +24,12 @@ class App(tk.Tk):
     calc_win = QuadraticCalc()
     calc_win.mainloop()
 
-class QuadraticCalc(tk.Tk):
+class QuadraticCalc(tk.Toplevel):
   def __init__(self):
-    tk.Tk.__init__(self)
+    tk.Toplevel.__init__(self)
     self.title('Quadratic Calculator')
+    self.wm_attributes('-topmost',1)
+    self.locked = True
 
     self.form_tag = tk.Label(self,text='ax^2 + bx + c = 0')
 
@@ -47,6 +51,17 @@ class QuadraticCalc(tk.Tk):
 
     self.button = tk.Button(self,text='Calculate!',command=self.calculate)
 
+    self.lock_i = Image.open('lock.gif')
+    self.unlock_i = Image.open('unlock.gif')
+
+    self.lock_i = self.lock_i.resize((15,15))
+    self.unlock_i = self.unlock_i.resize((15,15))
+
+    self.lock = ImageTk.PhotoImage(self.lock_i)
+    self.unlock = ImageTk.PhotoImage(self.unlock_i)
+
+    self.lock_b = tk.Button(self,image=self.lock,width='15',height='15',command=self.unlock_win)
+
     j = 1
     for k in self.entries:
       k.grid(row=j,column=1)
@@ -64,14 +79,26 @@ class QuadraticCalc(tk.Tk):
     self.ans.grid(row=6,column=0)
     self.ans2.grid(row=6,column=1)
 
+    self.lock_b.grid(row=7,column=0)
+
+  def unlock_win(self):
+    if self.locked:
+      self.wm_attributes('-topmost',0)
+      self.locked = False
+      self.lock_b.config(image=self.unlock)
+    elif not self.locked:
+      self.wm_attributes('-topmost',1)
+      self.locked = True
+      self.lock_b.config(image=self.lock)
+
   def calculate(self):
     a = ''
     b = ''
     c = ''
 
-    a = int(self.entries[0].get())
-    b = int(self.entries[1].get())
-    c = int(self.entries[2].get())
+    a = float(self.entries[0].get())
+    b = float(self.entries[1].get())
+    c = float(self.entries[2].get())
 
     b = b/a
     c = c/a
