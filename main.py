@@ -3,6 +3,7 @@ from tkinter import messagebox
 
 try:
   from PIL import Image, ImageTk
+  pil_enabled = True
 except ImportError:
   pil_enabled = False
   
@@ -29,6 +30,8 @@ class App(tk.Tk):
 
 class QuadraticCalc(tk.Toplevel):
   def __init__(self):
+    global pil_enabled
+    
     tk.Toplevel.__init__(self)
     self.title('Quadratic Calculator')
     self.wm_attributes('-topmost',1)
