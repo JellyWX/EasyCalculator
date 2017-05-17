@@ -1,8 +1,11 @@
 import tkinter as tk
 from tkinter import messagebox
 
-from PIL import Image, ImageTk
-
+try:
+  from PIL import Image, ImageTk
+except ImportError:
+  pil_enabled = False
+  
 from math import sqrt
 
 class App(tk.Tk):
@@ -51,16 +54,17 @@ class QuadraticCalc(tk.Toplevel):
 
     self.button = tk.Button(self,text='Calculate!',command=self.calculate)
 
-    self.lock_i = Image.open('lock.gif')
-    self.unlock_i = Image.open('unlock.gif')
+    if pil_enabled:
+      self.lock_i = Image.open('lock.gif')
+      self.unlock_i = Image.open('unlock.gif')
 
-    self.lock_i = self.lock_i.resize((15,15))
-    self.unlock_i = self.unlock_i.resize((15,15))
+      self.lock_i = self.lock_i.resize((15,15))
+      self.unlock_i = self.unlock_i.resize((15,15))
 
-    self.lock = ImageTk.PhotoImage(self.lock_i)
-    self.unlock = ImageTk.PhotoImage(self.unlock_i)
+      self.lock = ImageTk.PhotoImage(self.lock_i)
+      self.unlock = ImageTk.PhotoImage(self.unlock_i)
 
-    self.lock_b = tk.Button(self,image=self.lock,width='15',height='15',command=self.unlock_win)
+      self.lock_b = tk.Button(self,image=self.lock,width='15',height='15',command=self.unlock_win)
 
     j = 1
     for k in self.entries:
@@ -79,6 +83,7 @@ class QuadraticCalc(tk.Toplevel):
     self.ans.grid(row=6,column=0)
     self.ans2.grid(row=6,column=1)
 
+    if pil_enabled:
     self.lock_b.grid(row=7,column=0)
 
   def unlock_win(self):
