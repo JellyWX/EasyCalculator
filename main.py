@@ -84,7 +84,7 @@ class QuadraticCalc(tk.Toplevel):
     self.ans2.grid(row=6,column=1)
 
     if pil_enabled:
-    self.lock_b.grid(row=7,column=0)
+      self.lock_b.grid(row=7,column=0)
 
   def unlock_win(self):
     if self.locked:
